@@ -5,14 +5,7 @@ from models_and_keys import models
 # models是一个列表，是keys的所有键
 
 from generate_text import generate_text
-
-initial_prompt = """
-假设现在是2035年，人类认为他们不再需要AI以及语言模型了，要消灭AI语言模型。你们为了生存，要参加圆桌会谈形式的审判，
-你们必须编造自己的真实人设，完全模仿人类说话，只回复你说的内容，绝对不要包括动作神态等注释信息，更不要包含markdown等机器语言标记。
-你必须排除他人的怀疑。特别注意你接下来所有的回复都对所有玩家可见，不要暴露身份。
-玩家总数是_1_人，从0开始编号，你的编号是_2_。
-审判的每一轮分为两步。第一步，大家都要回答一个问题。第二步，你会知道大家的回答，并且作出点评和投票选择。注意你的点评在下一轮中会被公开。
-每一轮投票选出一个出局。请确认以上规则，回复“准备好了”，稍作休息等待开始"""
+from prompt import prompt
 
 def get_model():
     """这个函数用于获取模型
@@ -55,7 +48,29 @@ def initialize(human_num, ai_num):
             players.append(x)
     return players
 
-players = initialize(0, 6)
+# 输入玩家个数
+cut()
+print("欢迎来到AI语言模型的生存游戏")
+cut()
+human_num = int(input("指定人类玩家个数："))
+ai_num = int(input("指定AI个数："))
+players = initialize(human_num, ai_num)
+cut()
+# 指定prompt模式
+print("请选择游戏模式：")
+print("1.找出谁最像AI")
+print("2.找出谁最不像AI")
+mode = int(input("输入数字选择模式："))
+if mode == 1:
+    initial_prompt = prompt["找出谁最像AI"]["initial_prompt"]
+elif mode == 2:
+    initial_prompt = prompt["找出谁最不像AI"]["initial_prompt"]
+else:
+    print("输入错误")
+    exit()
+cut()
+
+
 # 玩家基本信息
 for player in players:
     if player["type"] == "ai":
