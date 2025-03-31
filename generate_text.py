@@ -7,7 +7,7 @@ def generate_text(prompt, md_enable=False, enter_enable=False, content="",
     url = urls[model]
     headers = {
         "Content-Type": "application/json",
-        "Authorization": keys[model]
+        "Authorization": "Bearer " + keys[model]
     }
     if not md_enable:
         prompt = "去除markdown格式 " + prompt

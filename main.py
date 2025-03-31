@@ -1,22 +1,23 @@
 import random
 from mimetypes import inited
-from models_and_keys import models
+from models_and_keys import models, names
 # models_and_keys.py是一个python文件，里面有一个字典keys，键是模型名称，值是模型的密钥
 # models是一个列表，是keys的所有键
 
 from generate_text import generate_text
 from prompt import prompt
 
-def get_model():
+def get_model(move_enable):
     """这个函数用于获取模型
     同一个模型只能返回一次，返回后就会从列表中移除"""
     model = random.choice(models)
+    models.remove(model)
     return model
 
 def cut():
     print("-----------------------------------------")
 
-def initialize(human_num, ai_num):
+def initialize(human_num, ai_num, remove_enable):
     total_num = human_num + ai_num
     # 在total_num范围内生成ai_num个随机数
     ai_numbers = random.sample(range(total_num), ai_num)
@@ -24,7 +25,7 @@ def initialize(human_num, ai_num):
     players = []
     for i in range(total_num):
         if i in ai_numbers:
-            model = get_model()
+            model = get_model(remove_enable)
             x = {
                 "type": "ai",
                 "player_id": i,
@@ -54,31 +55,36 @@ print("欢迎来到AI语言模型的生存游戏")
 cut()
 human_num = int(input("指定人类玩家个数："))
 ai_num = int(input("指定AI个数："))
-players = initialize(human_num, ai_num)
+cut()
+# 指定一个模型是否只能用一次
+print("指定一个模型是否只能用一次：")
+print("0: 是")
+print("1: 否")
+choice = int(input("请输入编号："))
+if choice == 0:
+    remove_enable = True
+else:
+    remove_enable = False
+players = initialize(human_num, ai_num, remove_enable=remove_enable)
 cut()
 # 指定prompt模式
 print("请选择游戏模式：")
-print("1.找出谁最像AI")
-print("2.找出谁最不像AI")
-mode = int(input("输入数字选择模式："))
-if mode == 1:
-    initial_prompt = prompt["找出谁最像AI"]["initial_prompt"]
-elif mode == 2:
-    initial_prompt = prompt["找出谁最不像AI"]["initial_prompt"]
-else:
-    print("输入错误")
-    exit()
+# 输出prompt的编号以及key以供选择模式
+for i in range(len(prompt)):
+    print(str(i) + ": " + prompt[i]["name"])
+mode = int(input("请输入编号："))
+initial_prompt = prompt[mode]["initial_prompt"]
 cut()
-
 
 # 玩家基本信息
 for player in players:
     if player["type"] == "ai":
-        print(player["player_id"], "号是AI，模型是" + player["model"])
+        print(player["player_id"], "号是AI，模型是" + names[player["model"]])
     else:
         print(player["player_id"], "号是玩家")
 cut()
 print("正在告知AI游戏规则")
+
 # 给AI初始提示词
 for player in players:
     if player["type"] == "ai":
