@@ -91,7 +91,7 @@ for player in players:
         prompt = initial_prompt.replace("_1_", str(len(players)))
         prompt = prompt.replace("_2_", str(player["player_id"]))
         resp = generate_text(prompt, md_enable=True, enter_enable=True, content="",
-                             model=player["model"], max_tokens=300, temperature=0.7,
+                             model=player["model"], max_tokens=250, temperature=0.7,
                              word_limit=-1, history=player["history"])
         player["history"] = resp["history"]
 
@@ -103,7 +103,7 @@ for player in players:
     if player["type"] == "ai":
         prompt = "请" + str(player["player_id"]) + "号自我介绍"
         resp = generate_text(prompt, md_enable=True, enter_enable=True, content="",
-                             model=player["model"], max_tokens=300, temperature=0.7,
+                             model=player["model"], max_tokens=250, temperature=0.7,
                              word_limit=-1, history=player["history"])
         player["response"] = str(player["player_id"]) + "号的自我介绍：" + resp["text"] + "\n"
         print(resp["text"])
@@ -154,7 +154,7 @@ while sum([1 for player in players if player["alive"]]) > 2:
         if player["type"] == "ai":
             prompt += "然后请回答问题，第" + str(game_round) + "轮的问题是：" + question
             resp = generate_text(prompt, md_enable=True, enter_enable=True, content="",
-                                 model=player["model"], max_tokens=300, temperature=0.7,
+                                 model=player["model"], max_tokens=250, temperature=0.7,
                                  word_limit=-1, history=player["history"])
             player["response"] = (str(player["player_id"]) + "号第" +str(game_round) +
                                    "轮的回答：" + resp["text"] + "\n")
@@ -190,7 +190,7 @@ while sum([1 for player in players if player["alive"]]) > 2:
                     prompt += other_player["last_response"]
             prompt += "请你分析投票"
             resp = generate_text(prompt, md_enable=True, enter_enable=True, content="",
-                                 model=player["model"], max_tokens=300, temperature=0.7,
+                                 model=player["model"], max_tokens=250, temperature=0.7,
                                  word_limit=-1, history=player["history"])
             player["response"] = (str(player["player_id"]) + "号第" + str(game_round) +
                                    "轮的分析和投票：" + resp["text"] + "\n")
