@@ -36,4 +36,4 @@ def generate_text(prompt, md_enable=False, enter_enable=False, content="",
         history.append(response_message)
         return {"status": "success", "text": response_message["content"], "history": history}
     else:
-        return {"status": "error"}
+        return {"status": "error", "text": "没有回答", "history": history}
