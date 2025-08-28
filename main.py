@@ -63,6 +63,9 @@ print("1: 否")
 choice = int(input("请输入编号："))
 if choice == 0:
     remove_enable = True
+    if ai_num > len(models):
+        print("可用模型数量不足，将自动调整AI个数为最大值" + str(len(models)))
+        ai_num = len(models)
 else:
     remove_enable = False
 players = initialize(human_num, ai_num, remove_enable=remove_enable)
